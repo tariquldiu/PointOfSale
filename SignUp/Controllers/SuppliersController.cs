@@ -82,7 +82,7 @@ namespace SignUp.Controllers
             db.Suppliers.Add(supplier);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = supplier.SupplierId }, supplier);
+            return CreatedAtRoute("DefaultApi", new { id = supplier.SupplierId}, supplier);
         }
 
         // DELETE: api/Suppliers/5

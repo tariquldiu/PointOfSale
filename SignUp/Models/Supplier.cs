@@ -10,6 +10,10 @@ namespace SignUp.Models
     [Table("Suppliers")]
     public class Supplier
     {
+        public Supplier()
+        {
+            List<Order> orders = new List<Order>();
+        }
         [Key]
         public int SupplierId { get; set; }
         public string SupplierName { get; set; }
@@ -18,5 +22,7 @@ namespace SignUp.Models
         public string CompanyAddress { get; set; }
         public string FactoryAddress { get; set; }
         public bool Status { get; set; }
+        public ICollection<Order> Orders { get; set; }
+       
     }
 }
