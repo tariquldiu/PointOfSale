@@ -10,16 +10,16 @@ namespace SignUp.Models
     [Table("Customers")]
     public class Customer
     {
-        public Customer()
-        {
-            this.Transactions = new List<Transaction>();
-        }
+        //public Customer()
+        //{
+        //    this.Transactions = new List<Transaction>();
+        //}
         [Key]
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public bool Status { get; set; }
 
-        public List<Transaction> Transactions { get; set; }
+        //public List<Transaction> Transactions { get; set; }
     }
 }

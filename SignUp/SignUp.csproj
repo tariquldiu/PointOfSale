@@ -240,8 +240,12 @@
     <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\AspNetUserRolesController.cs" />
     <Compile Include="Controllers\AspNetUsersController.cs" />
+    <Compile Include="Controllers\CategorysController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Regular\CategorysController.cs" />
+    <Compile Include="Controllers\Regular\CustomersController.cs" />
     <Compile Include="Controllers\Regular\SuppliersController.cs" />
     <Compile Include="Controllers\Regular\UsersController.cs" />
     <Compile Include="Controllers\SuppliersController.cs" />
@@ -286,6 +290,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PurchesReturn.cs" />
     <Compile Include="Models\SalesReturn.cs" />
+    <Compile Include="Models\SignUpContext.cs" />
     <Compile Include="Models\Stockin.cs" />
     <Compile Include="Models\Summary.cs" />
     <Compile Include="Models\Supplier.cs" />
@@ -303,7 +308,9 @@
     <Content Include="AngularJS\angular-local-storage.min.js" />
     <Content Include="AngularJS\angular.js" />
     <Content Include="AngularJS\authInterceptorService.js" />
+    <Content Include="AngularJS\Category.js" />
     <Content Include="AngularJS\change-password.js" />
+    <Content Include="AngularJS\Customer.js" />
     <Content Include="AngularJS\forgot-password.js" />
     <Content Include="AngularJS\login.js" />
     <Content Include="AngularJS\reset-password.js" />
@@ -2509,6 +2516,8 @@
     <Content Include="web\vendor\select2\src\scss\_multiple.scss" />
     <Content Include="web\vendor\select2\src\scss\_single.scss" />
     <Content Include="Views\Suppliers\Index.cshtml" />
+    <Content Include="Views\Customers\Index.cshtml" />
+    <Content Include="Views\Categorys\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\User\" />
