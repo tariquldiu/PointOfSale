@@ -240,10 +240,12 @@
     <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\AspNetUserRolesController.cs" />
     <Compile Include="Controllers\AspNetUsersController.cs" />
+    <Compile Include="Controllers\BankDetailsController.cs" />
     <Compile Include="Controllers\CategorysController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Regular\BankDetailsController.cs" />
     <Compile Include="Controllers\Regular\CategorysController.cs" />
     <Compile Include="Controllers\Regular\CustomersController.cs" />
     <Compile Include="Controllers\Regular\SuppliersController.cs" />
@@ -308,6 +310,7 @@
     <Content Include="AngularJS\angular-local-storage.min.js" />
     <Content Include="AngularJS\angular.js" />
     <Content Include="AngularJS\authInterceptorService.js" />
+    <Content Include="AngularJS\BankDetail.js" />
     <Content Include="AngularJS\Category.js" />
     <Content Include="AngularJS\change-password.js" />
     <Content Include="AngularJS\Customer.js" />
@@ -2518,6 +2521,7 @@
     <Content Include="Views\Suppliers\Index.cshtml" />
     <Content Include="Views\Customers\Index.cshtml" />
     <Content Include="Views\Categorys\Index.cshtml" />
+    <Content Include="Views\BankDetails\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\User\" />
