@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using SignUp.Dto;
 using SignUp.Models;
 
 namespace SignUp.Controllers
@@ -16,89 +17,130 @@ namespace SignUp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Suppliers
-        public IQueryable<Supplier> GetSuppliers()
+        [HttpGet]
+        [Route("api/Suppliers/AllSuppliers")]
+        public HttpResponseMessage AllSuppliers()
         {
-            return db.Suppliers;
-        }
+            var supplierList = db.Suppliers.Select(supplier => new SupplierListDto()
 
-        // GET: api/Suppliers/5
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactNo = supplier.ContactNo,
+                Company = supplier.Company,
+                CompanyAddress = supplier.CompanyAddress,
+                FactoryAddress = supplier.FactoryAddress,
+                Status = supplier.Status
+            });
+            var supplierDisList = supplierList.OrderByDescending(s => s.SupplierId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, supplierDisList);
+        }
+        [HttpGet]
+        [Route("api/Suppliers/GetSupplier/{id}")]
         [ResponseType(typeof(Supplier))]
-        public IHttpActionResult GetSupplier(int id)
+        public HttpResponseMessage GetSupplier(int id)
         {
-            Supplier supplier = db.Suppliers.Find(id);
-            if (supplier == null)
-            {
-                return NotFound();
+            var supplierObj = db.Suppliers.Find(id);
+            if (supplierObj == null)
+            { 
+                return Request.CreateResponse(HttpStatusCode.NotFound, "The data is not found");
             }
+            var supplierOne = db.Suppliers.Select(supplier => new SupplierListDto()
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactNo = supplier.ContactNo,
+                Company = supplier.Company, 
+                CompanyAddress = supplier.CompanyAddress,
+                FactoryAddress = supplier.FactoryAddress,
+                Status = supplier.Status
+            }).SingleOrDefault(d => d.SupplierId == id);
 
-            return Ok(supplier);
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, supplierOne);
         }
+    
 
-        // PUT: api/Suppliers/5
+        [HttpPut]
+        [Route("api/Suppliers/UpdateSupplier/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSupplier(int id, Supplier supplier)
+        public IHttpActionResult UpdateSupplier([FromUri]int id, [FromBody]Supplier supplier)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != supplier.SupplierId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(supplier).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SupplierExists(id))
+                Supplier supplierEntity = db.Suppliers.Find(id);
+                if (supplierEntity == null)
                 {
-                    return NotFound();
+
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Supplier with SupplierId= " + id.ToString() + " is not found"));
+
                 }
                 else
                 {
-                    throw;
+
+                    supplierEntity.SupplierName = supplier.SupplierName;
+                    supplierEntity.ContactNo = supplier.ContactNo;
+                    supplierEntity.Company = supplier.Company;
+                    supplierEntity.CompanyAddress = supplier.CompanyAddress;
+                    supplierEntity.FactoryAddress = supplier.FactoryAddress;
+                    supplierEntity.Status = supplier.Status;
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, supplierEntity));
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
-        // POST: api/Suppliers
+        [HttpPost]
+        [Route("api/Suppliers/CreateSupplier")]
         [ResponseType(typeof(Supplier))]
-        public IHttpActionResult PostSupplier(Supplier supplier)
+        public IHttpActionResult CreateSupplier(Supplier supplier)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                db.Suppliers.Add(supplier);
+                db.SaveChanges();
+                return Created(new Uri(Request.RequestUri + supplier.SupplierId.ToString()), supplier);
+            }
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex));
             }
 
-            db.Suppliers.Add(supplier);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = supplier.SupplierId}, supplier);
         }
-
-        // DELETE: api/Suppliers/5
+        [HttpDelete]
+        [Route("api/Suppliers/DeleteSupplier/{id}")]
         [ResponseType(typeof(Supplier))]
         public IHttpActionResult DeleteSupplier(int id)
         {
-            Supplier supplier = db.Suppliers.Find(id);
-            if (supplier == null)
+
+            try
             {
-                return NotFound();
+                Supplier supplier = db.Suppliers.Find(id);
+                if (supplier == null)
+                {
+
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Supplier with SupplierId= " + id.ToString() + " is not found"));
+
+                }
+                else
+                {
+
+                    db.Suppliers.Remove(supplier);
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "Supplier Deleted"));
+                }
+
             }
-
-            db.Suppliers.Remove(supplier);
-            db.SaveChanges();
-
-            return Ok(supplier);
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
         protected override void Dispose(bool disposing)

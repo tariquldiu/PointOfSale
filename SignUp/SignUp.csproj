@@ -253,6 +253,7 @@
     <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Dto\SupplierListDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -292,7 +293,6 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PurchesReturn.cs" />
     <Compile Include="Models\SalesReturn.cs" />
-    <Compile Include="Models\SignUpContext.cs" />
     <Compile Include="Models\Stockin.cs" />
     <Compile Include="Models\Summary.cs" />
     <Compile Include="Models\Supplier.cs" />
@@ -2522,6 +2522,7 @@
     <Content Include="Views\Customers\Index.cshtml" />
     <Content Include="Views\Categorys\Index.cshtml" />
     <Content Include="Views\BankDetails\Index.cshtml" />
+    <Content Include="Views\Suppliers\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\User\" />
