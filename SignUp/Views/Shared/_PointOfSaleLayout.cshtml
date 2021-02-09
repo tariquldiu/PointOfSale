@@ -11,7 +11,7 @@
     <link href="~/web/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="~/web/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="~/web/css/ruang-admin.min.css" rel="stylesheet">
-    @RenderSection("head", required: false)
+    @RenderSection("style", required: false)
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -51,7 +51,7 @@
             <div class="sidebar-heading">
                 Inventory
             </div>
-            <l  i class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier"
                    aria-expanded="true" aria-controls="collapseBootstrap">
                     <i class="far fa-fw fa-truck-moving"></i>
@@ -60,6 +60,45 @@
                 <div id="collapseSupplier" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="/Suppliers/Index">Supplier List</a>
+
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomer"
+                   aria-expanded="true" aria-controls="collapseBootstrap">
+                    <i class="far fa-fw fa-truck-moving"></i>
+                    <span>Manage Customer</span>
+                </a>
+                <div id="collapseCustomer" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/Customers/Index">Customer List</a>
+
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategory"
+                   aria-expanded="true" aria-controls="collapseBootstrap">
+                    <i class="far fa-fw fa-truck-moving"></i>
+                    <span>Manage Category</span>
+                </a>
+                <div id="collapseCategory" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/Categorys/Index">Category List</a>
+
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBank"
+                   aria-expanded="true" aria-controls="collapseBootstrap">
+                    <i class="far fa-fw fa-truck-moving"></i>
+                    <span>Manage Bank</span>
+                </a>
+                <div id="collapseBank" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/BankDetails/Index">Bank List</a>
 
                     </div>
                 </div>
