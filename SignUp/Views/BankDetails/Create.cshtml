@@ -1,0 +1,104 @@
+﻿
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_PointOfSaleLayout.cshtml";
+}
+
+<script src="~/AngularJS/angular.js"></script>
+<script src="~/AngularJS/angular-local-storage.min.js"></script>
+<script src="~/AngularJS/authInterceptorService.js"></script>
+<script src="~/AngularJS/BankDetail.js"></script>
+
+@section style
+    {
+    <style>
+        .form-control {
+            display: inline;
+        }
+    </style>
+}
+<div ng-app="bankDetailApp">
+    <div ng-controller="bankDetailController">
+        <div class="card mb-3  row">
+            <div class="card-body">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom:5px;">Add Bank Details</h6>
+                <table style="width: 100%">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankName" placeholder="Bank Name">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankBranch" placeholder="Bank Branch">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankAccountNo" placeholder="Bank Account No">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankAccountType" placeholder="Bank Account Type">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.PaymentType" placeholder="Payment Type">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankTransactionNo" placeholder="Bank Transaction No">
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" ng-click="AddSupplier(Supplier);" ng-disabled="!BankDetail.BankName || !BankDetail.BankBranch || !BankDetail.BankAccountNo || !BankDetail.BankAccountType || !BankDetail.PaymentType || !BankDetail.BankTransactionNo" class="btn btn-sm btn-outline-primary mb-1">{{btnSave}}</button>
+                                <button type="button" ng-click="ResetObject();" class="btn btn-sm btn-outline-warning mb-1">Reset</button>
+                                <button type="button" ng-click="RedirectToList();" class="btn btn-sm btn-outline-info mb-1">List</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-top: 10px; padding-bottom: 10px;">Bank Detail List</h6>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>BankAccountNo</th>
+                                <th>Address</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="bankDetail in BankDetailTempList">
+                                <td>{{bankDetail.BankName}}</td>
+                                <td>{{bankDetail.BankBranch}}</td>
+                                <td>{{bankDetail.BankAccountNo}}</td>
+                                <td>{{bankDetail.BankAccountType}}</td>
+                                <td>{{bankDetail.BankAccountType}}</td>
+                                <td ng-if="bankDetail.Status == true">Yes</td>
+                                <td ng-if="bankDetail.Status == false">No</td>
+
+                                <td>
+                                    <button type="button" ng-click="Remove(bankDetail);" class="btn btn-sm btn-outline-danger mb-1">Remove</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding-top: 10px;">
+                    <button type="button" ng-click="SaveSuppliers();" ng-disabled="SupplierTempList.length<=0" class="btn btn-sm btn-outline-primary mb-1">Submit</button>
+                    <button type="button" ng-click="RedirectToList();" class="btn btn-sm btn-outline-warning mb-1">Cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

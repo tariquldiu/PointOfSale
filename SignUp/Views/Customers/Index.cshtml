@@ -12,6 +12,8 @@
 <div ng-app="customerApp">
     <div class="row" ng-controller="customerController">
         <div class="col-lg-12 mb-4">
+            <button type="button" disabled class="btn btn-sm btn-outline-primary mb-1">Supplier List</button>
+            <button type="button" ng-click="AddNew();" class="btn btn-sm btn-outline-primary mb-1">Add New</button>
             <!-- Simple Tables -->
             <div class="card">
 
@@ -32,8 +34,9 @@
                                 <td>{{customer.Status}}</td>
 
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-outline-primary mb-1">Edit</a>
-                                    <a href="#" class="btn btn-sm btn-outline-danger mb-1">Delete</a>
+                                    <button type="button" ng-click="Edit(customer);" class="btn btn-sm btn-outline-primary mb-1">Edit</button>
+                                    <button type="button" ng-click="Delete(customer);" class="btn btn-sm btn-outline-danger mb-1">Delete</button>
+
                                 </td>
                             </tr>
 

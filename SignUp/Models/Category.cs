@@ -10,11 +10,16 @@ namespace SignUp.Models
     [Table("Categorys")]
     public class Category
     {
+        public Category()
+        {
+            this.Products = new List<Product>();
+        }
         [Key]
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string CategoryType { get; set; }
         public string Unit { get; set; }
         public bool Status { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
