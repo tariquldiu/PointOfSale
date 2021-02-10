@@ -8,15 +8,6 @@ bankDetailApp.config(function ($httpProvider) {
 
 bankDetailApp.controller('bankDetailController', ['$scope', 'bankDetailService', function ($scope, bankDetailService) {
 
-    //$scope.init = function () {
-    //    bankDetailService.GetAllBankDetails().then(function (response) {
-    //        $scope.BankDetailList = response.data;
-    //    }, function () {
-    //        alert("Failed to get Bank Detail!");
-    //    })
-    //}
-
-    //$scope.init();
 
     Clear();
     function Clear() {
@@ -39,7 +30,94 @@ bankDetailApp.controller('bankDetailController', ['$scope', 'bankDetailService',
         sessionStorage.removeItem("BankDetail");
     }
 
+    function GetAllBankDetails() {
+        bankDetailService.GetAllBankDetails().then(function (response) {
+            $scope.BankDetailList = response.data;
+        }, function () {
+            alert("Failed to get Bank Detail!");
+        })
+    }
+    function ResetObject() {
+        $scope.BankDetail = {};
+        $scope.BankDetail.BankId = 0;
+    }
+    $scope.AddBankDetail = function (bankDetail) {
+        if ($scope.BankDetail.BankId == 0) {
+            $scope.BankDetail.Status = true;
+            $scope.BankDetailTempList.push(bankDetail)
+            ResetObject();
+        }
+        else {
+            $scope.BankDetailTempList.push(bankDetail);
+            $scope.btnSave = 'Add BankDetail';
+            ResetObject();
+        }
+    }
+    $scope.AddNew = function () {
+        window.location.href = "/BankDetails/Create";
+    }
+    $scope.SaveBankDetail = function () {
+        var bankDetailCount = $scope.BankDetailTempList.length;
+        angular.forEach($scope.BankDetailTempList, function (data) {
+            if (data.BankId == 0) {
+                bankDetailService.SaveBankDetail(data).then(function (response) {
+                    bankDetailCount--;
+                    if (bankDetailCount == 0) {
+                        alert("Bank Detail Saved Successfully");
+                        window.location.href = "/BankDetails/Index";
+                    }
 
+                }, function () {
+                    alert("Error occured. Please try again.");
+
+                });
+            }
+            else {
+                bankDetailService.UpdateBankDetail(data).then(function (response) {
+                    bankDetailCount--;
+                    if (bankDetailCount == 0) {
+                        alert("Bank Detail Update Successfully");
+                        window.location.href = "/BankDetails/Index";
+                    }
+
+                }, function () {
+                    alert("Error occured. Please try again.");
+
+                });
+            }
+
+        });
+
+
+    }
+    $scope.Delete = function (bankDetail) {
+        var r = confirm("Are you sure you want to delete?");
+        if (r == true) {
+            bankDetailService.DeleteBankDetail(bankDetail).then(function (response) {
+                alert("Bank Detail Deleted Successfully");
+                window.location.reload();
+            }, function () {
+                alert("Error occured. Please try again.");
+
+            });
+        } else {
+            return;
+        }
+    }
+    $scope.Edit = function (bankDetail) {
+        sessionStorage.setItem("BankDetail", JSON.stringify(bankDetail));
+        window.location.href = "/BankDetails/Create"
+    }
+    $scope.ResetObject = function () {
+        ResetObject();
+    }
+    $scope.RedirectToList = function () {
+        window.location.href = "/BankDetails/Index";
+    }
+    $scope.Remove = function (bankDetail) {
+        var index = $scope.BankDetailTempList.indexOf(bankDetail);
+        $scope.BankDetailTempList.splice(index, 1);
+    }
 
 
 }])
@@ -50,9 +128,18 @@ bankDetailApp.factory('bankDetailService', ['$http', function ($http) {
     var bankDetailAppFactory = {};
 
     bankDetailAppFactory.GetAllBankDetails = function () {
-        return $http.get('/api/BankDetails')
+        return $http.get('/api/BankDetails/AllBankDetails')
     }
+    bankDetailAppFactory.SaveBankDetail = function (BankDetail) {
+        return $http.post('/api/BankDetails/CreateBankDetail', BankDetail)
+    };
+    bankDetailAppFactory.UpdateBankDetail = function (BankDetail) {
+        return $http.put('/api/BankDetails/UpdateBankDetail/' + BankDetail.BankId, BankDetail)
+    };
 
+    bankDetailAppFactory.DeleteBankDetail = function (BankDetail) {
+        return $http.delete('/api/BankDetails/DeleteBankDetail/' + BankDetail.BankId)
+    };
 
     return bankDetailAppFactory;
 

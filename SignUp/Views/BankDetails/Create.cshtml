@@ -50,7 +50,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button type="button" ng-click="AddSupplier(Supplier);" ng-disabled="!BankDetail.BankName || !BankDetail.BankBranch || !BankDetail.BankAccountNo || !BankDetail.BankAccountType || !BankDetail.PaymentType || !BankDetail.BankTransactionNo" class="btn btn-sm btn-outline-primary mb-1">{{btnSave}}</button>
+                                <button type="button" ng-click="AddBankDetail(BankDetail);" ng-disabled="!BankDetail.BankName || !BankDetail.BankBranch || !BankDetail.BankAccountNo || !BankDetail.BankAccountType || !BankDetail.PaymentType || !BankDetail.BankTransactionNo" class="btn btn-sm btn-outline-primary mb-1">{{btnSave}}</button>
                                 <button type="button" ng-click="ResetObject();" class="btn btn-sm btn-outline-warning mb-1">Reset</button>
                                 <button type="button" ng-click="RedirectToList();" class="btn btn-sm btn-outline-info mb-1">List</button>
                             </td>
@@ -63,11 +63,11 @@
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th>Name</th>
-                                <th>Contact</th>
-                                <th>BankAccountNo</th>
-                                <th>Address</th>
-                                <th>Address</th>
+                                <th>Bank Name</th>
+                                <th>Branch</th>
+                                <th>Account No</th>
+                                <th>Account Type</th>
+                                <th>Payment Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -78,7 +78,7 @@
                                 <td>{{bankDetail.BankBranch}}</td>
                                 <td>{{bankDetail.BankAccountNo}}</td>
                                 <td>{{bankDetail.BankAccountType}}</td>
-                                <td>{{bankDetail.BankAccountType}}</td>
+                                <td>{{bankDetail.PaymentType}}</td>
                                 <td ng-if="bankDetail.Status == true">Yes</td>
                                 <td ng-if="bankDetail.Status == false">No</td>
 
@@ -91,7 +91,7 @@
                     </table>
                 </div>
                 <div style="padding-top: 10px;">
-                    <button type="button" ng-click="SaveSuppliers();" ng-disabled="SupplierTempList.length<=0" class="btn btn-sm btn-outline-primary mb-1">Submit</button>
+                    <button type="button" ng-click="SaveBankDetail();" ng-disabled="BankDetailTempList.length<=0" class="btn btn-sm btn-outline-primary mb-1">Submit</button>
                     <button type="button" ng-click="RedirectToList();" class="btn btn-sm btn-outline-warning mb-1">Cancel</button>
 
                 </div>

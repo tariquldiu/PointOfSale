@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using SignUp.Dto;
 using SignUp.Models;
 
 namespace SignUp.Controllers
@@ -17,9 +18,26 @@ namespace SignUp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/BankDetails
-        public IQueryable<BankDetail> GetBankDetails()
+        
+        [HttpGet]
+        [Route("api/BankDetails/AllBankDetails")]
+        public HttpResponseMessage AllBankDetails()
         {
-            return db.BankDetails;
+            var bankDetailList = db.BankDetails.Select(bankDetail => new BankDetailListDto()
+
+            {
+                BankId = bankDetail.BankId,
+                BankName = bankDetail.BankName,
+                BankBranch = bankDetail.BankBranch,
+                BankAccountNo = bankDetail.BankAccountNo,
+                BankAccountType = bankDetail.BankAccountType,
+                PaymentType = bankDetail.PaymentType,
+                BankTransactionNo = bankDetail.BankTransactionNo,
+                Status = bankDetail.Status
+            });
+            var bankDetailDisList = bankDetailList.OrderByDescending(b => b.BankId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, bankDetailDisList);
         }
 
         // GET: api/BankDetails/5
@@ -71,34 +89,81 @@ namespace SignUp.Controllers
         }
 
         // POST: api/BankDetails
+        [HttpPost]
+        [Route("api/BankDetails/CreateBankDetail")]
         [ResponseType(typeof(BankDetail))]
-        public IHttpActionResult PostBankDetail(BankDetail bankDetail)
+        public IHttpActionResult CreateBankDetail(BankDetail bankDetail)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                db.BankDetails.Add(bankDetail);
+                db.SaveChanges();
+                return Created(new Uri(Request.RequestUri + bankDetail.BankId.ToString()), bankDetail);
+            }
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex));
             }
 
-            db.BankDetails.Add(bankDetail);
-            db.SaveChanges();
+        }
+        [HttpPut]
+        [Route("api/BankDetails/UpdateBankDetail/{id}")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult UpdateBankDetail([FromUri]int id, [FromBody]BankDetail bankDetail)
+        {
+            try
+            {
+                BankDetail bankDetailEntity = db.BankDetails.Find(id);
+                if (bankDetailEntity == null)
+                {
 
-            return CreatedAtRoute("DefaultApi", new { id = bankDetail.BankId }, bankDetail);
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "BankDetail with BankId= " + id.ToString() + " is not found"));
+
+                }
+                else
+                {
+
+                    bankDetailEntity.BankName = bankDetail.BankName;
+                    bankDetailEntity.BankBranch = bankDetail.BankBranch;
+                    bankDetailEntity.BankAccountNo = bankDetail.BankAccountNo;
+                    bankDetailEntity.BankAccountType = bankDetail.BankAccountType;
+                    bankDetailEntity.PaymentType = bankDetail.PaymentType;
+                    bankDetailEntity.BankTransactionNo = bankDetail.BankTransactionNo;
+                    bankDetailEntity.Status = bankDetail.Status;
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, bankDetailEntity));
+                }
+            }
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
-        // DELETE: api/BankDetails/5
+        [HttpDelete]
+        [Route("api/BankDetails/DeleteBankDetail/{id}")]
         [ResponseType(typeof(BankDetail))]
         public IHttpActionResult DeleteBankDetail(int id)
         {
-            BankDetail bankDetail = db.BankDetails.Find(id);
-            if (bankDetail == null)
+            try
             {
-                return NotFound();
+                BankDetail bankDetail = db.BankDetails.Find(id);
+                if (bankDetail == null)
+                {
+
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Bank Detail with BankId= " + id.ToString() + " is not found"));
+                }
+                else
+                {
+                    db.BankDetails.Remove(bankDetail);
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "BankDetail Deleted"));
+                }
             }
-
-            db.BankDetails.Remove(bankDetail);
-            db.SaveChanges();
-
-            return Ok(bankDetail);
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
         protected override void Dispose(bool disposing)
