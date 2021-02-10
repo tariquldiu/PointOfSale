@@ -244,9 +244,11 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\Regular\BankDetailsController.cs" />
     <Compile Include="Controllers\Regular\CategorysController.cs" />
     <Compile Include="Controllers\Regular\CustomersController.cs" />
+    <Compile Include="Controllers\Regular\ProductsController.cs" />
     <Compile Include="Controllers\Regular\SuppliersController.cs" />
     <Compile Include="Controllers\Regular\UsersController.cs" />
     <Compile Include="Controllers\SuppliersController.cs" />
@@ -318,6 +320,7 @@
     <Content Include="AngularJS\Customer.js" />
     <Content Include="AngularJS\forgot-password.js" />
     <Content Include="AngularJS\login.js" />
+    <Content Include="AngularJS\product.js" />
     <Content Include="AngularJS\reset-password.js" />
     <Content Include="AngularJS\role.js" />
     <Content Include="AngularJS\signup.js" />
@@ -2528,6 +2531,7 @@
     <Content Include="Views\Categorys\Create.cshtml" />
     <Content Include="Views\Customers\Create.cshtml" />
     <Content Include="Views\BankDetails\Create.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\User\" />

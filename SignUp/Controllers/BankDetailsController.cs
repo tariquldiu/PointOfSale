@@ -53,40 +53,6 @@ namespace SignUp.Controllers
             return Ok(bankDetail);
         }
 
-        // PUT: api/BankDetails/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutBankDetail(int id, BankDetail bankDetail)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != bankDetail.BankId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(bankDetail).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BankDetailExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
 
         // POST: api/BankDetails
         [HttpPost]
