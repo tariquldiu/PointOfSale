@@ -3,7 +3,7 @@ namespace SignUp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Add_Models : DbMigration
+    public partial class V1 : DbMigration
     {
         public override void Up()
         {
@@ -13,14 +13,42 @@ namespace SignUp.Migrations
                     {
                         BankId = c.Int(nullable: false, identity: true),
                         BankName = c.String(),
-                        BankBranch = c.String(),
                         BankAccountNo = c.String(),
                         BankAccountType = c.String(),
-                        PaymentType = c.String(),
-                        BankTransactionNo = c.String(),
+                        AccountFor = c.String(),
+                        CustomerId = c.Int(nullable: false),
+                        CompanyId = c.Int(nullable: false),
                         Status = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => t.BankId);
+                .PrimaryKey(t => t.BankId)
+                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .Index(t => t.CustomerId)
+                .Index(t => t.CompanyId);
+            
+            CreateTable(
+                "dbo.Companies",
+                c => new
+                    {
+                        CompanyId = c.Int(nullable: false, identity: true),
+                        CompanyName = c.String(),
+                        CompanyAddress = c.String(),
+                        BusinessType = c.String(),
+                        Status = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.CompanyId);
+            
+            CreateTable(
+                "dbo.Customers",
+                c => new
+                    {
+                        CustomerId = c.Int(nullable: false, identity: true),
+                        CustomerName = c.String(),
+                        CustomerAddress = c.String(),
+                        CustomerPhone = c.String(),
+                        Status = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.CustomerId);
             
             CreateTable(
                 "dbo.Categorys",
@@ -35,30 +63,22 @@ namespace SignUp.Migrations
                 .PrimaryKey(t => t.CategoryId);
             
             CreateTable(
-                "dbo.Transactions",
+                "dbo.Products",
                 c => new
                     {
-                        TransactionId = c.Int(nullable: false, identity: true),
-                        InvoiceNo = c.String(),
-                        TransactionDate = c.DateTime(nullable: false),
-                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        TransVat = c.String(),
-                        TransDiscount = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        TransactionQty = c.Int(nullable: false),
-                        SubTotal = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        ProductId = c.Int(nullable: false, identity: true),
+                        ProductNo = c.String(),
+                        ProductName = c.String(),
+                        Description = c.String(),
+                        OriginalPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        MarkupPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        ProductQty = c.Int(nullable: false),
                         Status = c.Boolean(nullable: false),
-                        UserId = c.Int(nullable: false),
-                        CustomerId = c.Int(nullable: false),
-                        OrderId = c.Int(nullable: false),
-                        Order_OrdedrId = c.Int(),
+                        CategoryId = c.Int(),
                     })
-                .PrimaryKey(t => t.TransactionId)
-                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
-                .ForeignKey("dbo.Orders", t => t.Order_OrdedrId)
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
-                .Index(t => t.CustomerId)
-                .Index(t => t.Order_OrdedrId);
+                .PrimaryKey(t => t.ProductId)
+                .ForeignKey("dbo.Categorys", t => t.CategoryId)
+                .Index(t => t.CategoryId);
             
             CreateTable(
                 "dbo.Orders",
@@ -80,35 +100,18 @@ namespace SignUp.Migrations
                 .Index(t => t.ProductId);
             
             CreateTable(
-                "dbo.Products",
+                "dbo.Suppliers",
                 c => new
                     {
-                        ProductId = c.Int(nullable: false, identity: true),
-                        ProductNo = c.String(),
-                        ProductName = c.String(),
-                        Description = c.String(),
-                        OriginalPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        MarkupPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        ProductQty = c.Int(nullable: false),
-                        Status = c.Boolean(nullable: false),
-                        CategoryId = c.Int(),
-                    })
-                .PrimaryKey(t => t.ProductId)
-                .ForeignKey("dbo.Categorys", t => t.CategoryId)
-                .Index(t => t.CategoryId);
-            
-            CreateTable(
-                "dbo.Users",
-                c => new
-                    {
-                        UserId = c.Int(nullable: false, identity: true),
-                        FullName = c.String(),
-                        UserName = c.String(),
-                        Password = c.String(),
-                        UserRole = c.String(),
+                        SupplierId = c.Int(nullable: false, identity: true),
+                        SupplierName = c.String(),
+                        ContactNo = c.String(),
+                        Company = c.String(),
+                        CompanyAddress = c.String(),
+                        FactoryAddress = c.String(),
                         Status = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => t.UserId);
+                .PrimaryKey(t => t.SupplierId);
             
             CreateTable(
                 "dbo.DamagedProducts",
@@ -152,9 +155,30 @@ namespace SignUp.Migrations
                     })
                 .PrimaryKey(t => t.StockinId)
                 .ForeignKey("dbo.Orders", t => t.Orders_OrdedrId)
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
                 .Index(t => t.Orders_OrdedrId);
+            
+            CreateTable(
+                "dbo.AspNetRoles",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Name = c.String(nullable: false, maxLength: 256),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.Name, unique: true, name: "RoleNameIndex");
+            
+            CreateTable(
+                "dbo.AspNetUserRoles",
+                c => new
+                    {
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        RoleId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.RoleId);
             
             CreateTable(
                 "dbo.SalesReturns",
@@ -199,6 +223,75 @@ namespace SignUp.Migrations
                 .Index(t => t.BankId);
             
             CreateTable(
+                "dbo.Transactions",
+                c => new
+                    {
+                        TransactionId = c.Int(nullable: false, identity: true),
+                        InvoiceNo = c.String(),
+                        TransactionDate = c.DateTime(nullable: false),
+                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TransVat = c.String(),
+                        TransDiscount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TransactionQty = c.Int(nullable: false),
+                        SubTotal = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Status = c.Boolean(nullable: false),
+                        UserId = c.Int(nullable: false),
+                        CustomerId = c.Int(nullable: false),
+                        OrderId = c.Int(nullable: false),
+                        Order_OrdedrId = c.Int(),
+                    })
+                .PrimaryKey(t => t.TransactionId)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.Order_OrdedrId)
+                .Index(t => t.CustomerId)
+                .Index(t => t.Order_OrdedrId);
+            
+            CreateTable(
+                "dbo.AspNetUsers",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Email = c.String(maxLength: 256),
+                        EmailConfirmed = c.Boolean(nullable: false),
+                        PasswordHash = c.String(),
+                        SecurityStamp = c.String(),
+                        PhoneNumber = c.String(),
+                        PhoneNumberConfirmed = c.Boolean(nullable: false),
+                        TwoFactorEnabled = c.Boolean(nullable: false),
+                        LockoutEndDateUtc = c.DateTime(),
+                        LockoutEnabled = c.Boolean(nullable: false),
+                        AccessFailedCount = c.Int(nullable: false),
+                        UserName = c.String(nullable: false, maxLength: 256),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
+            
+            CreateTable(
+                "dbo.AspNetUserClaims",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        ClaimType = c.String(),
+                        ClaimValue = c.String(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.AspNetUserLogins",
+                c => new
+                    {
+                        LoginProvider = c.String(nullable: false, maxLength: 128),
+                        ProviderKey = c.String(nullable: false, maxLength: 128),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
                 "dbo.WastageExchanges",
                 c => new
                     {
@@ -223,48 +316,65 @@ namespace SignUp.Migrations
         {
             DropForeignKey("dbo.WastageExchanges", "Product_ProductId", "dbo.Products");
             DropForeignKey("dbo.WastageExchanges", "CustomerId", "dbo.Customers");
+            DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Transactions", "Order_OrdedrId", "dbo.Orders");
+            DropForeignKey("dbo.Transactions", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.Summarys", "BankId", "dbo.BankDetails");
             DropForeignKey("dbo.SalesReturns", "StockinId", "dbo.Stockins");
             DropForeignKey("dbo.SalesReturns", "ProductId", "dbo.Products");
             DropForeignKey("dbo.SalesReturns", "CustomerId", "dbo.Customers");
+            DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.DamagedProducts", "Stockins_StockinId", "dbo.Stockins");
-            DropForeignKey("dbo.Stockins", "UserId", "dbo.Users");
             DropForeignKey("dbo.Stockins", "Orders_OrdedrId", "dbo.Orders");
             DropForeignKey("dbo.DamagedProducts", "ProductId", "dbo.Products");
             DropForeignKey("dbo.DamagedProducts", "Orders_OrdedrId", "dbo.Orders");
-            DropForeignKey("dbo.Transactions", "UserId", "dbo.Users");
-            DropForeignKey("dbo.Transactions", "Order_OrdedrId", "dbo.Orders");
             DropForeignKey("dbo.Orders", "SupplierId", "dbo.Suppliers");
             DropForeignKey("dbo.Orders", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Products", "CategoryId", "dbo.Categorys");
-            DropForeignKey("dbo.Transactions", "CustomerId", "dbo.Customers");
+            DropForeignKey("dbo.BankDetails", "CustomerId", "dbo.Customers");
+            DropForeignKey("dbo.BankDetails", "CompanyId", "dbo.Companies");
             DropIndex("dbo.WastageExchanges", new[] { "Product_ProductId" });
             DropIndex("dbo.WastageExchanges", new[] { "CustomerId" });
+            DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.Transactions", new[] { "Order_OrdedrId" });
+            DropIndex("dbo.Transactions", new[] { "CustomerId" });
             DropIndex("dbo.Summarys", new[] { "BankId" });
             DropIndex("dbo.SalesReturns", new[] { "StockinId" });
             DropIndex("dbo.SalesReturns", new[] { "ProductId" });
             DropIndex("dbo.SalesReturns", new[] { "CustomerId" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
+            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Stockins", new[] { "Orders_OrdedrId" });
-            DropIndex("dbo.Stockins", new[] { "UserId" });
             DropIndex("dbo.DamagedProducts", new[] { "Stockins_StockinId" });
             DropIndex("dbo.DamagedProducts", new[] { "Orders_OrdedrId" });
             DropIndex("dbo.DamagedProducts", new[] { "ProductId" });
-            DropIndex("dbo.Products", new[] { "CategoryId" });
             DropIndex("dbo.Orders", new[] { "ProductId" });
             DropIndex("dbo.Orders", new[] { "SupplierId" });
-            DropIndex("dbo.Transactions", new[] { "Order_OrdedrId" });
-            DropIndex("dbo.Transactions", new[] { "CustomerId" });
-            DropIndex("dbo.Transactions", new[] { "UserId" });
+            DropIndex("dbo.Products", new[] { "CategoryId" });
+            DropIndex("dbo.BankDetails", new[] { "CompanyId" });
+            DropIndex("dbo.BankDetails", new[] { "CustomerId" });
             DropTable("dbo.WastageExchanges");
+            DropTable("dbo.AspNetUserLogins");
+            DropTable("dbo.AspNetUserClaims");
+            DropTable("dbo.AspNetUsers");
+            DropTable("dbo.Transactions");
             DropTable("dbo.Summarys");
             DropTable("dbo.SalesReturns");
+            DropTable("dbo.AspNetUserRoles");
+            DropTable("dbo.AspNetRoles");
             DropTable("dbo.Stockins");
             DropTable("dbo.DamagedProducts");
-            DropTable("dbo.Users");
-            DropTable("dbo.Products");
+            DropTable("dbo.Suppliers");
             DropTable("dbo.Orders");
-            DropTable("dbo.Transactions");
+            DropTable("dbo.Products");
             DropTable("dbo.Categorys");
+            DropTable("dbo.Customers");
+            DropTable("dbo.Companies");
             DropTable("dbo.BankDetails");
         }
     }

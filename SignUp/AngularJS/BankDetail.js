@@ -13,18 +13,21 @@ bankDetailApp.controller('bankDetailController', ['$scope', 'bankDetailService',
     function Clear() {
 
         $scope.BankDetail = {};
-        $scope.btnSave = 'Add BankDetail';
+        $scope.btnSave = 'Add Bank Detail';
         $scope.BankDetail.BankId = 0;
+        $scope.BankDetail.CustomerId = 0;
+        $scope.BankDetail.CompanyId = 0;
         $scope.BankDetailList = [];
         $scope.BankDetailTempList = [];
         GetAllBankDetails();
         LoadBankDetail();
+        GetAllCustomers();
     }
 
     function LoadBankDetail() {
         var bankDetail = sessionStorage.getItem("BankDetail");
         if (bankDetail != null) {
-            $scope.btnSave = 'Update BankDetail';
+            $scope.btnSave = 'Update Bank Detail';
             $scope.BankDetail = JSON.parse(sessionStorage.BankDetail);
         }
         sessionStorage.removeItem("BankDetail");
@@ -37,9 +40,22 @@ bankDetailApp.controller('bankDetailController', ['$scope', 'bankDetailService',
             alert("Failed to get Bank Detail!");
         })
     }
+    function GetAllCustomers() {
+        bankDetailService.GetAllCustomers().then(function (response) {
+            $scope.CustomerList = response.data;
+        }, function () {
+            alert("Failed to get customer!");
+        })
+    }
     function ResetObject() {
         $scope.BankDetail = {};
         $scope.BankDetail.BankId = 0;
+    }
+    $scope.SetCustomerAccount = function () {
+        $scope.BankDetail.AccountFor = "Customer";
+    }
+    $scope.SetCompanyAccount = function () {
+        $scope.BankDetail.AccountFor = "Company";
     }
     $scope.AddBankDetail = function (bankDetail) {
         if ($scope.BankDetail.BankId == 0) {
@@ -49,7 +65,7 @@ bankDetailApp.controller('bankDetailController', ['$scope', 'bankDetailService',
         }
         else {
             $scope.BankDetailTempList.push(bankDetail);
-            $scope.btnSave = 'Add BankDetail';
+            $scope.btnSave = 'Add Bank Detail';
             ResetObject();
         }
     }
@@ -140,7 +156,10 @@ bankDetailApp.factory('bankDetailService', ['$http', function ($http) {
     bankDetailAppFactory.DeleteBankDetail = function (BankDetail) {
         return $http.delete('/api/BankDetails/DeleteBankDetail/' + BankDetail.BankId)
     };
-
+    bankDetailAppFactory.GetAllCustomers = function () {
+        return $http.get('/api/Customers/AllCustomers')
+    }
     return bankDetailAppFactory;
 
 }])
+

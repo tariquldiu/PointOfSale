@@ -31,6 +31,7 @@ namespace SignUp.Controllers
             {
                 CustomerId = customer.CustomerId,
                 CustomerName = customer.CustomerName,
+                CustomerAddress = customer.CustomerAddress,
                 CustomerPhone = customer.CustomerPhone,
                 Status = customer.Status
             });
@@ -72,6 +73,7 @@ namespace SignUp.Controllers
                 {
 
                     customerEntity.CustomerName = customer.CustomerName;
+                    customerEntity.CustomerAddress = customer.CustomerAddress;
                     customerEntity.CustomerPhone = customer.CustomerPhone;
                     customerEntity.Status = customer.Status;
                     db.SaveChanges();

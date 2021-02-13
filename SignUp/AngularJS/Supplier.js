@@ -12,6 +12,7 @@ supplierApp.controller('supplierController', ['$scope', 'supplierService', funct
 
         $scope.Supplier = {};
         $scope.btnSave = 'Add Supplier';
+        $scope.addBtnDisable = false;
         $scope.Supplier.SupplierId = 0;
         $scope.SupplierList = [];
         $scope.SupplierTempList = [];
@@ -66,6 +67,7 @@ supplierApp.controller('supplierController', ['$scope', 'supplierService', funct
         else {
             $scope.SupplierTempList.push(supplier);
             $scope.btnSave = 'Add Supplier';
+            $scope.addBtnDisable = true;
             ResetObject();
         }
     }

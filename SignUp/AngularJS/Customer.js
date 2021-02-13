@@ -36,6 +36,9 @@ customerApp.controller('customerController', ['$scope', 'customerService', funct
     }
     $scope.AddCustomer = function (customer) {
         if ($scope.Customer.CustomerId == 0) {
+            if ($scope.Customer.CustomerAddress == undefined || $scope.Customer.CustomerAddress == "") {
+                $scope.Customer.CustomerAddress = "Undefined";
+            }
             $scope.Customer.Status = true;
             $scope.CustomerTempList.push(customer)
             ResetObject();

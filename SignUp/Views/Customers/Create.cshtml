@@ -27,10 +27,13 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="Customer.CustomerName" placeholder="Customer Name">
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="Customer.CustomerName" placeholder="Name">
                             </td>
                             <td>
-                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="Customer.CustomerPhone" placeholder="Customer Phone">
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="Customer.CustomerAddress" placeholder="Address">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="Customer.CustomerPhone" placeholder="Phone">
                             </td>
                         </tr>
                         <tr>
@@ -48,8 +51,9 @@
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th>Customer Name</th>
-                                <th>Customer Phone</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Phone</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -57,6 +61,7 @@
                         <tbody>
                             <tr ng-repeat="customer in CustomerTempList">
                                 <td>{{customer.CustomerName}}</td>
+                                <td>{{customer.CustomerAddress}}</td>
                                 <td>{{customer.CustomerPhone}}</td>
                                 <td ng-if="customer.Status == true">Yes</td>
                                 <td ng-if="customer.Status == false">No</td>

@@ -29,28 +29,39 @@
                             <td>
                                 <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankName" placeholder="Bank Name">
                             </td>
-                            <td>
-                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankBranch" placeholder="Bank Branch">
-                            </td>
+
                             <td>
                                 <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankAccountNo" placeholder="Bank Account No">
                             </td>
-                        </tr>
-                        <tr>
                             <td>
                                 <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankAccountType" placeholder="Bank Account Type">
                             </td>
-                            <td>
-                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.PaymentType" placeholder="Payment Type">
+                        </tr>
+                        <tr>
+                            <td class="mb-3">
+                                <div style="float: left; padding-right: 25%;">
+                                    <input type="radio" name="AccountFor" value="Customer" ng-change="SetCustomerAccount" ng-model="BankDetail.AccountFor" />
+                                    <label for="AccountFor">Customer</label>
+                                </div>
+                                <div style="float: left;">
+                                    <input type="radio" name="AccountFor" value="Company" ng-change="SetCompanyAccount" ng-model="BankDetail.AccountFor" />
+                                    <label for="AccountFor">Company</label>
+                                </div>
+                                
                             </td>
                             <td>
-                                <input class="form-control form-control-sm  mb-3" style="width: 100%;" type="text" ng-model="BankDetail.BankTransactionNo" placeholder="Bank Transaction No">
-                            </td>
+                                <select class="form-control form-control-sm  mb-3" ng-model="ddlCustomer" ng-hide="BankDetail.AccountFor !='Customer'" ng-options="item.CustomerName for item in CustomerList track by item.CustomerId " ng-change="BankDetail.CustomerId=ddlCustomer.CustomerId; BankDetail.CustomerName=ddlCustomer.CustomerName">
+                                    <option value="">--Select Customer--</option>
+                                </select>
+                                <select class="form-control form-control-sm  mb-3" ng-model="ddlCompany" ng-hide="BankDetail.AccountFor !='Company'" ng-options="item.CompanyName for item in CompanyList track by item.CompanyId " ng-change="BankDetail.CompanyId=ddlCompany.CompanyId; BankDetail.CompanyName=ddlCompany.CompanyName">
+                                    <option value="">--Select Company--</option>
+                                </select>
 
+                            </td>
                         </tr>
                         <tr>
                             <td>
-                                <button type="button" ng-click="AddBankDetail(BankDetail);" ng-disabled="!BankDetail.BankName || !BankDetail.BankBranch || !BankDetail.BankAccountNo || !BankDetail.BankAccountType || !BankDetail.PaymentType || !BankDetail.BankTransactionNo" class="btn btn-sm btn-outline-primary mb-1">{{btnSave}}</button>
+                                <button type="button" ng-click="AddBankDetail(BankDetail);" ng-disabled="!BankDetail.BankName || !BankDetail.BankAccountNo || !BankDetail.BankAccountType || !BankDetail.AccountFor" class="btn btn-sm btn-outline-primary mb-1">{{btnSave}}</button>
                                 <button type="button" ng-click="ResetObject();" class="btn btn-sm btn-outline-warning mb-1">Reset</button>
                                 <button type="button" ng-click="RedirectToList();" class="btn btn-sm btn-outline-info mb-1">List</button>
                             </td>
@@ -63,11 +74,11 @@
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th>Bank Name</th>
-                                <th>Branch</th>
+                                <th>Bank</th>
                                 <th>Account No</th>
                                 <th>Account Type</th>
-                                <th>Payment Type</th>
+                                <th>Account For</th>
+                                <th>Account User</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -75,10 +86,11 @@
                         <tbody>
                             <tr ng-repeat="bankDetail in BankDetailTempList">
                                 <td>{{bankDetail.BankName}}</td>
-                                <td>{{bankDetail.BankBranch}}</td>
                                 <td>{{bankDetail.BankAccountNo}}</td>
                                 <td>{{bankDetail.BankAccountType}}</td>
-                                <td>{{bankDetail.PaymentType}}</td>
+                                <td>{{bankDetail.AccountFor}}</td>
+                                <td ng-if="bankDetail.CustomerId != 0">{{bankDetail.CustomerName}}</td>
+                                <td ng-if="bankDetail.CompanyId != 0">{{bankDetail.Company}}</td>
                                 <td ng-if="bankDetail.Status == true">Yes</td>
                                 <td ng-if="bankDetail.Status == false">No</td>
 

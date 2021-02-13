@@ -23,20 +23,27 @@ namespace SignUp.Controllers
         [Route("api/BankDetails/AllBankDetails")]
         public HttpResponseMessage AllBankDetails()
         {
-            var bankDetailList = db.BankDetails.Select(bankDetail => new BankDetailListDto()
-
-            {
-                BankId = bankDetail.BankId,
-                BankName = bankDetail.BankName,
-                BankBranch = bankDetail.BankBranch,
-                BankAccountNo = bankDetail.BankAccountNo,
-                BankAccountType = bankDetail.BankAccountType,
-                PaymentType = bankDetail.PaymentType,
-                BankTransactionNo = bankDetail.BankTransactionNo,
-                Status = bankDetail.Status
-            });
+            var customers = db.Customers.ToList();
+            var companies = db.Companies.ToList();
+            var bankDetails = db.BankDetails.ToList(); 
+            var bankDetailList = from bank in bankDetails 
+                            join comp in companies on bank.CompanyId equals comp.CompanyId
+                            join cust in customers on bank.CustomerId equals cust.CustomerId
+                            select new
+                            {
+                                bank.BankId,
+                                bank.BankName,
+                                bank.BankAccountNo,
+                                bank.BankAccountType,
+                                bank.AccountFor,
+                                bank.CustomerId,
+                                bank.CompanyId,
+                                comp.CompanyName,
+                                cust.CustomerName,
+                                bank.Status
+                            };
+           
             var bankDetailDisList = bankDetailList.OrderByDescending(b => b.BankId);
-
             return Request.CreateResponse(HttpStatusCode.OK, bankDetailDisList);
         }
 
@@ -83,18 +90,18 @@ namespace SignUp.Controllers
                 if (bankDetailEntity == null)
                 {
 
-                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "BankDetail with BankId= " + id.ToString() + " is not found"));
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Bank Detail with BankId= " + id.ToString() + " is not found"));
 
                 }
                 else
                 {
 
                     bankDetailEntity.BankName = bankDetail.BankName;
-                    bankDetailEntity.BankBranch = bankDetail.BankBranch;
                     bankDetailEntity.BankAccountNo = bankDetail.BankAccountNo;
                     bankDetailEntity.BankAccountType = bankDetail.BankAccountType;
-                    bankDetailEntity.PaymentType = bankDetail.PaymentType;
-                    bankDetailEntity.BankTransactionNo = bankDetail.BankTransactionNo;
+                    bankDetailEntity.AccountFor = bankDetail.AccountFor; 
+                    bankDetailEntity.CustomerId = bankDetail.CustomerId;
+                    bankDetailEntity.CompanyId = bankDetail.CompanyId;
                     bankDetailEntity.Status = bankDetail.Status;
                     db.SaveChanges();
                     return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, bankDetailEntity));
@@ -123,7 +130,7 @@ namespace SignUp.Controllers
                 {
                     db.BankDetails.Remove(bankDetail);
                     db.SaveChanges();
-                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "BankDetail Deleted"));
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "Bank Detail Deleted"));
                 }
             }
             catch (Exception ex)
