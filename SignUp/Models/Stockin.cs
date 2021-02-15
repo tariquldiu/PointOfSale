@@ -20,7 +20,6 @@ namespace SignUp.Models
         public bool Status { get; set; }
        // [ForeignKey("UserId")]
         public int UserId { get; set; }
-        public User User { get; set; }
        /// [ForeignKey("OrderId")]
         public int OrderId { get; set; }
         public Order Orders { get; set; }

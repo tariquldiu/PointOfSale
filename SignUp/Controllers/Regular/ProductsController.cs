@@ -6,20 +6,12 @@ using System.Web.Mvc;
 
 namespace SignUp.Controllers.Regular
 {
-    public class CategorysController : Controller
+    public class ProductsController : Controller
     {
-        // GET: Categorys
+        // GET: Products
         public ActionResult Index()
         {
             return View();
         }
-
-        // GET: Categorys/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-       
     }
 }

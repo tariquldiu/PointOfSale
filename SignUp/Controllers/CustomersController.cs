@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using SignUp.Dto;
 using SignUp.Models;
 
 namespace SignUp.Controllers
@@ -17,10 +18,28 @@ namespace SignUp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Customers
-        public IQueryable<Customer> GetCustomers()
+        //public IQueryable<Customer> GetCustomers()
+        //{
+        //    return db.Customers;
+        //}
+        [HttpGet]
+        [Route("api/Customers/AllCustomers")]
+        public HttpResponseMessage AllCustomers()
         {
-            return db.Customers;
+            var customerList = db.Customers.Select(customer => new CustomerListDto()
+
+            {
+                CustomerId = customer.CustomerId,
+                CustomerName = customer.CustomerName,
+                CustomerAddress = customer.CustomerAddress,
+                CustomerPhone = customer.CustomerPhone,
+                Status = customer.Status
+            });
+            var customerDisList = customerList.OrderByDescending(c => c.CustomerId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, customerDisList);
         }
+
 
         // GET: api/Customers/5
         [ResponseType(typeof(Customer))]
@@ -36,69 +55,81 @@ namespace SignUp.Controllers
         }
 
         // PUT: api/Customers/5
+        [HttpPut]
+        [Route("api/Customers/UpdateCustomer/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCustomer(int id, Customer customer)
+        public IHttpActionResult UpdateCustomer([FromUri]int id, [FromBody]Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != customer.CustomerId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(customer).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
+                Customer customerEntity = db.Customers.Find(id);
+                if (customerEntity == null)
                 {
-                    return NotFound();
+
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Customer with CustomerId= " + id.ToString() + " is not found"));
+
                 }
                 else
                 {
-                    throw;
+
+                    customerEntity.CustomerName = customer.CustomerName;
+                    customerEntity.CustomerAddress = customer.CustomerAddress;
+                    customerEntity.CustomerPhone = customer.CustomerPhone;
+                    customerEntity.Status = customer.Status;
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, customerEntity));
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
         // POST: api/Customers
+
+        [HttpPost]
+        [Route("api/Customers/CreateCustomer")]
         [ResponseType(typeof(Customer))]
-        public IHttpActionResult PostCustomer(Customer customer)
+        public IHttpActionResult CreateCustomer(Customer customer)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                db.Customers.Add(customer);
+                db.SaveChanges();
+                return Created(new Uri(Request.RequestUri + customer.CustomerId.ToString()), customer);
+            }
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex));
             }
 
-            db.Customers.Add(customer);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerId }, customer);
         }
 
         // DELETE: api/Customers/5
+        [HttpDelete]
+        [Route("api/Customers/DeleteCustomer/{id}")]
         [ResponseType(typeof(Customer))]
         public IHttpActionResult DeleteCustomer(int id)
         {
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
+            try
             {
-                return NotFound();
+                Customer customer = db.Customers.Find(id);
+                if (customer == null)
+                {
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Customer with CustomerId= " + id.ToString() + " is not found"));
+                }
+                else
+                {
+                    db.Customers.Remove(customer);
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "Customer Deleted"));
+                }
             }
-
-            db.Customers.Remove(customer);
-            db.SaveChanges();
-
-            return Ok(customer);
+            catch (Exception ex)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex));
+            }
         }
 
         protected override void Dispose(bool disposing)

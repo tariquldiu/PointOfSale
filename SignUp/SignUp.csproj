@@ -2,7 +2,6 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -27,7 +26,6 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
-    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +75,7 @@
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -245,47 +244,33 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\Regular\BankDetailsController.cs" />
     <Compile Include="Controllers\Regular\CategorysController.cs" />
     <Compile Include="Controllers\Regular\CustomersController.cs" />
+    <Compile Include="Controllers\Regular\ProductsController.cs" />
     <Compile Include="Controllers\Regular\SuppliersController.cs" />
     <Compile Include="Controllers\Regular\UsersController.cs" />
     <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Dto\CategoryListDto.cs" />
+    <Compile Include="Dto\CompanyListDto.cs" />
+    <Compile Include="Dto\CustomerListDto.cs" />
     <Compile Include="Dto\SupplierListDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202101151915391_Authentication.cs" />
-    <Compile Include="Migrations\202101151915391_Authentication.Designer.cs">
-      <DependentUpon>202101151915391_Authentication.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101221950490_Add Supplier.cs" />
-    <Compile Include="Migrations\202101221950490_Add Supplier.Designer.cs">
-      <DependentUpon>202101221950490_Add Supplier.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101222003311_Add_SupplierV2.cs" />
-    <Compile Include="Migrations\202101222003311_Add_SupplierV2.Designer.cs">
-      <DependentUpon>202101222003311_Add_SupplierV2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101261357164_AddCustomer.cs" />
-    <Compile Include="Migrations\202101261357164_AddCustomer.Designer.cs">
-      <DependentUpon>202101261357164_AddCustomer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101261458311_Add_All_Models.cs" />
-    <Compile Include="Migrations\202101261458311_Add_All_Models.Designer.cs">
-      <DependentUpon>202101261458311_Add_All_Models.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101261727150_Add_Models.cs" />
-    <Compile Include="Migrations\202101261727150_Add_Models.Designer.cs">
-      <DependentUpon>202101261727150_Add_Models.cs</DependentUpon>
+    <Compile Include="Migrations\202102131834173_V1.cs" />
+    <Compile Include="Migrations\202102131834173_V1.Designer.cs">
+      <DependentUpon>202102131834173_V1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BankDetail.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DamagedProduct.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -297,7 +282,6 @@
     <Compile Include="Models\Summary.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Models\WastageExchange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -316,6 +300,7 @@
     <Content Include="AngularJS\Customer.js" />
     <Content Include="AngularJS\forgot-password.js" />
     <Content Include="AngularJS\login.js" />
+    <Content Include="AngularJS\Product.js" />
     <Content Include="AngularJS\reset-password.js" />
     <Content Include="AngularJS\role.js" />
     <Content Include="AngularJS\signup.js" />
@@ -327,6 +312,97 @@
       <DependentUpon>AspNetUsers.mdf</DependentUpon>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AI.Agent.Intercept.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.xml" />
+    <Content Include="bin\Microsoft.AI.PerfCounterCollector.dll" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.dll" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.xml" />
+    <Content Include="bin\Microsoft.AI.Web.dll" />
+    <Content Include="bin\Microsoft.AI.Web.xml" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.dll" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.xml" />
+    <Content Include="bin\Microsoft.ApplicationInsights.dll" />
+    <Content Include="bin\Microsoft.ApplicationInsights.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Microsoft.Owin.xml" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\Owin.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\csi.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
+    <Content Include="bin\roslyn\System.AppContext.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.StackTrace.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\SignUp.dll" />
+    <Content Include="bin\SignUp.pdb" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.Owin.dll" />
+    <Content Include="bin\System.Web.Http.Owin.xml" />
+    <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.xml" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\style.css" />
@@ -359,6 +435,16 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="bin\ApplicationInsights.config" />
+    <Content Include="bin\roslyn\csc.exe.config" />
+    <Content Include="bin\roslyn\csc.rsp" />
+    <Content Include="bin\roslyn\csi.rsp" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\vbc.exe.config" />
+    <Content Include="bin\roslyn\vbc.rsp" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="bin\SignUp.dll.config" />
     <Content Include="web\404.html" />
     <Content Include="web\alerts.html" />
     <Content Include="web\blank.html" />
@@ -2295,7 +2381,6 @@
     <Content Include="web\vendor\select2\tests\vendor\jquery-3.4.1.js" />
     <Content Include="web\vendor\select2\tests\vendor\qunit-1.23.1.css" />
     <Content Include="web\vendor\select2\tests\vendor\qunit-1.23.1.js" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2308,7 +2393,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Services\MailFormat.xml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -2323,15 +2410,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_PointOfSaleLayout.cshtml" />
-    <Content Include="Views\Users\Signup.cshtml" />
-    <Content Include="Views\Users\Login.cshtml" />
-    <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\Users\ChangePassword.cshtml" />
-    <Content Include="Views\Users\ForgotPassword.cshtml" />
-    <Content Include="Views\Users\ResetPassword.cshtml" />
-    <Content Include="Views\Users\Role.cshtml" />
-    <Content Include="Views\Users\UserRole.cshtml" />
     <Content Include="web\font\Nunito-Regular.ttf" />
     <Content Include="web\img\logo\logo.ai" />
     <Content Include="web\LICENSE" />
@@ -2518,14 +2596,24 @@
     <Content Include="web\vendor\select2\src\scss\_dropdown.scss" />
     <Content Include="web\vendor\select2\src\scss\_multiple.scss" />
     <Content Include="web\vendor\select2\src\scss\_single.scss" />
-    <Content Include="Views\Suppliers\Index.cshtml" />
-    <Content Include="Views\Customers\Index.cshtml" />
-    <Content Include="Views\Categorys\Index.cshtml" />
+    <Content Include="Views\BankDetails\Create.cshtml" />
     <Content Include="Views\BankDetails\Index.cshtml" />
+    <Content Include="Views\Categorys\Create.cshtml" />
+    <Content Include="Views\Categorys\Index.cshtml" />
+    <Content Include="Views\Customers\Create.cshtml" />
+    <Content Include="Views\Customers\Index.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Suppliers\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\User\" />
+    <Content Include="Views\Suppliers\Index.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\Users\ForgotPassword.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Login.cshtml" />
+    <Content Include="Views\Users\ResetPassword.cshtml" />
+    <Content Include="Views\Users\Role.cshtml" />
+    <Content Include="Views\Users\Signup.cshtml" />
+    <Content Include="Views\Users\UserRole.cshtml" />
+    <Content Include="Views\Shared\_PointOfSaleLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -2536,34 +2624,15 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101151915391_Authentication.resx">
-      <DependentUpon>202101151915391_Authentication.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202102131834173_V1.resx">
+      <DependentUpon>202102131834173_V1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101221950490_Add Supplier.resx">
-      <DependentUpon>202101221950490_Add Supplier.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101222003311_Add_SupplierV2.resx">
-      <DependentUpon>202101222003311_Add_SupplierV2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101261357164_AddCustomer.resx">
-      <DependentUpon>202101261357164_AddCustomer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101261458311_Add_All_Models.resx">
-      <DependentUpon>202101261458311_Add_All_Models.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101261727150_Add_Models.resx">
-      <DependentUpon>202101261727150_Add_Models.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

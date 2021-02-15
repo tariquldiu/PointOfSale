@@ -28,6 +28,7 @@ namespace SignUp.Models
         
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Company> Companies { get; set; } 
         public DbSet<BankDetail> BankDetails { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -36,8 +37,7 @@ namespace SignUp.Models
         public DbSet<SalesReturn> SalesReturns { get; set; }
         public DbSet<Stockin> Stockins { get; set; }
         public DbSet<Summary> Summarys { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<Transaction> Transactions { get; set; } 
         public DbSet<WastageExchange> WastageExchanges { get; set; }
 
         public static ApplicationDbContext Create()

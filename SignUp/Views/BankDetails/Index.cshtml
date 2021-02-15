@@ -12,6 +12,10 @@
 <div ng-app="bankDetailApp">
     <div class="row" ng-controller="bankDetailController">
         <div class="col-lg-12 mb-4">
+            <div>
+                <button type="button" disabled class="btn btn-sm btn-outline-primary mb-1">Bank Detail List</button>
+                <button type="button" ng-click="AddNew();" class="btn btn-sm btn-outline-primary mb-1">Add New</button>
+            </div>
             <!-- Simple Tables -->
             <div class="card">
 
@@ -20,11 +24,10 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Bank</th>
-                                <th>Branch</th>
                                 <th>Account No</th>
                                 <th>Account Type</th>
-                                <th>Payment Type</th>
-                                <th>Transaction No</th>
+                                <th>Account For</th>
+                                <th>Account User</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -32,16 +35,17 @@
                         <tbody>
                             <tr ng-repeat="bankDetail in BankDetailList">
                                 <td>{{bankDetail.BankName}}</td>
-                                <td>{{bankDetail.BankBranch}}</td>
                                 <td>{{bankDetail.BankAccountNo}}</td>
                                 <td>{{bankDetail.BankAccountType}}</td>
-                                <td>{{bankDetail.PaymentType}}</td>
-                                <td>{{bankDetail.BankTransactionNo}}</td>
-                                <td>{{bankDetail.Status}}</td>
+                                <td>{{bankDetail.AccountFor}}</td>
+                                <td ng-if="bankDetail.CustomerId != 0">{{bankDetail.CustomerName}}</td>
+                                <td ng-if="bankDetail.CompanyId != 0">{{bankDetail.Company}}</td>
+                                <td ng-if="bankDetail.Status == true">Yes</td>
+                                <td ng-if="bankDetail.Status == false">No</td>
 
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-outline-primary mb-1">Edit</a>
-                                    <a href="#" class="btn btn-sm btn-outline-danger mb-1">Delete</a>
+                                    <button type="button" ng-click="Edit(bankDetail);" class="btn btn-sm btn-outline-primary mb-1">Edit</button>
+                                    <button type="button" ng-click="Delete(bankDetail);" class="btn btn-sm btn-outline-danger mb-1">Delete</button>
                                 </td>
                             </tr>
 
